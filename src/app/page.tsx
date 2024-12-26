@@ -5,13 +5,43 @@ import { supabase } from "../../utils/supabase";
 
 export default function Home() {
   useEffect(() => {
-    supabase.from('test').select('*').then(console.log);
+    const fetchTable = async () => {
+      const { data, error } = await supabase
+      .from('test').select('*');
+
+      if (error) {
+        console.error('Error fetching data:', error);
+      } else {
+        console.log('Fetched data:', data);
+      }
+    };
+
+    fetchTable();
+    //   const { error } = await supabase
+    //     .from('test').insert({
+    //       id: 3
+    //     });
+    // }
+    // insertTable();
   }, []);
+
+  const signInWithKakao = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'kakao',
+    });
+    
+    if (error) {
+      console.error("Error signing in:", error);
+    } else {
+      console.log("Sign in successful:", data);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-items-center min-h-screen w-screen p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]">
       <h1 className="text-5xl underline decoration-wavy decoration-red-700 underline-offset-8 font-extrabold mb-4 whitespace-nowrap">걍 내가 만드는 소리얼 예약 페이지</h1>
       <div className="w-[75%] justify-items-center">
+        <button className="bg-gradient-to-r from-yellow-500 to-red-500 font-bold py-2 px-4 mb-8 rounded" type="button" onClick={() => signInWithKakao()}>Sign In with Kakao</button>
         <table className="w-full max-w-[75%] border-collapse border border-gray-300">
           <thead>
             <tr>
