@@ -1,11 +1,15 @@
 # 소개
 
-이 프로젝트는 [Next.js](https://nextjs.org)로 제작된 프로젝트입니다. 배포는 [Supabase](https://supabase.com/)를 이용하였습니다.
+이 프로젝트는 [Next.js](https://nextjs.org)로 제작된 프로젝트입니다. 배포는 [Versel](https://vercel.com), DB는 [Supabase](https://supabase.com/)를 이용하였습니다.
 
 - Next.js
     
     TailwindCSS와 React, TypeScript를 활용한 간편한 앱 제작을 위하여 사용되었습니다.
 
+- Versel
+
+    Next.js를 배포하기 위해 가장 많이 사용되는 배포 도구입니다.
+    
 - Supabase
 
     지속적인 예약 정보 저장을 위해서는 데이터베이스가 필요하기 때문에 Supabase를 사용하였습니다. Firebase를 대체하여 사용되는 배포 도구입니다.
