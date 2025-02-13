@@ -70,7 +70,7 @@ export default function Home() {
                 return (
                   <td key={dayIndex} className="border border-gray-300 p-0">
                     {Array.from({ length: 12 }).map((_, hourIndex) => {
-                      const hour = 11 + hourIndex; // Start from 11:00
+                      let hour = (11 + hourIndex).toString().padStart(2, '0'); // Start from 11:00
                       const [inputValue, setInputValue] = useState('');
 
                       const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
