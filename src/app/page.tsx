@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
+import { User } from "@supabase/auth-js";
 
 export default function Home() {
   const [tableData, setTableData] = useState<any[]>([]);
   const [trigger, setTrigger] = useState(0);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [hourReserving, setHourReserving] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchTable = async () => {
@@ -92,18 +94,22 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-items-center min-h-screen w-full p-8 pb-20 gap-8 font-[family-name:var(--font-geist-sans)] overflow-x-hidden">
-      <h1 className="text-5xl underline decoration-wavy decoration-red-700 underline-offset-8 font-extrabold whitespace-nowrap">소리얼 예약 페이지</h1>
+      <h1 className="text-3xl md:text-5xl underline decoration-wavy decoration-red-700 underline-offset-8 font-extrabold whitespace-nowrap">소리얼 예약 페이지</h1>
       <div className="w-[75%] justify-items-center">
         {loggedIn ? (
-          <div className="flex items-center gap-4 mb-8">
-            <span className="text-md md:text-2xl font-medium">{user?.user_metadata?.name || '사용자'}님 환영합니다</span>
+          <div className="flex flex-1 items-center gap-4 mb-8">
+            <span className="text-sm md:text-2xl font-medium whitespace-nowrap">{user?.user_metadata?.name || '사용자'}님<br/>환영합니다</span>
             <button 
-              className="bg-yellow-300 font-bold py-2 px-4 rounded" 
+              className="text-xs md:text-lg bg-yellow-300 font-bold py-2 px-4 rounded-xl whitespace-nowrap" 
               type="button" 
               style={{ fontFamily: 'Noto Sans KR' }}
               onClick={() => signOut()}>
               로그아웃
             </button>
+            <div className="flex">
+              <div className={`text-xs md:text-lg ${hourReserving === true ? 'bg-green-300' : 'bg-gray-300'} p-2 rounded-l-xl cursor-pointer whitespace-nowrap`} onClick={() => setHourReserving(!hourReserving)}>1시간</div>
+              <div className={`text-xs md:text-lg ${hourReserving === true ? 'bg-gray-300' : 'bg-green-300'} p-2 rounded-r-xl cursor-pointer whitespace-nowrap`} onClick={() => setHourReserving(!hourReserving)}>2시간</div>
+            </div>
           </div>
         ) : (
           <button 
@@ -114,7 +120,8 @@ export default function Home() {
             카카오로 로그인
           </button>
         )}
-        <table className="w-full max-w-[75%] border-collapse border border-gray-300">
+        
+        <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr>
               {weekDates.map((item) => (
@@ -159,13 +166,13 @@ export default function Home() {
                         ) : (
                           loggedIn ? (
                             <button
-                              className="w-full h-10 text-sm hover:bg-blue-50 transition-colors pl-8"
+                              className="w-full h-10 text-sm hover:bg-blue-50 transition-colors pl-8 whitespace-nowrap"
                               onClick={handleReservation}
                             >
                               예약
                             </button>
                           ) : (
-                            <div className="flex p-1 h-10 justify-center items-center text-sm text-gray-400 pl-8">
+                            <div className="flex p-1 h-10 justify-center items-center text-sm text-gray-400 pl-8 whitespace-nowrap">
                               로그인
                             </div>
                           )
