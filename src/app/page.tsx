@@ -27,6 +27,21 @@ export default function Home() {
     fetchTable();
   }, [trigger]);
 
+  const handleReservation = async (day : string, time : number) => {
+    const { error } = await supabase.from('test').insert({ 
+      reserved_day: day, 
+      reserved_time: time, 
+      user_name: user?.user_metadata?.name || '익명'
+    });
+    if (error) {
+      console.error('Error inserting data:', error);
+    }
+    else {
+      console.log('Data inserted successfully');
+      setTrigger(prev => prev + 1);
+    }
+  };
+
   // 초기 세션 확인
   const checkSession = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -137,22 +152,7 @@ export default function Home() {
               {weekDates.map((item) => (
                 <td key={item.date} className="border border-gray-300 p-0">
                   {Array.from({ length: 12 }).map((_, hourIndex) => {
-                    let hour = 11 + hourIndex; // Start from 11:00
-
-                    const handleReservation = async () => {
-                      const { error } = await supabase.from('test').insert({ 
-                        reserved_day: item.date, 
-                        reserved_time: hour, 
-                        user_name: user?.user_metadata?.name || '익명'
-                      });
-                      if (error) {
-                        console.error('Error inserting data:', error);
-                      }
-                      else {
-                        console.log('Data inserted successfully');
-                        setTrigger(prev => prev + 1);
-                      }
-                    };
+                    let hour = 11 + hourIndex; // 11:00부터 시작
 
                     return (
                       <div key={hourIndex} className="flex-1 border-b border-gray-200 last:border-b-0">
@@ -167,7 +167,7 @@ export default function Home() {
                           loggedIn ? (
                             <button
                               className="w-full h-10 text-sm hover:bg-blue-50 transition-colors pl-8 whitespace-nowrap"
-                              onClick={handleReservation}
+                              onClick={() => handleReservation(item.date, hour)}
                             >
                               예약
                             </button>
