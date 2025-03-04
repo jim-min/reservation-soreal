@@ -3,11 +3,8 @@ import { supabase } from "../../utils/supabase";
 import { PublicStore } from "@/app/page";
 import { useState } from "react";
 
-interface LoginProps {
-    user: User | null;
-}
-const Login = ({ user } : LoginProps) => {
-    const { loggedIn } = PublicStore();
+const Login = () => {
+    const { loggedIn, user } = PublicStore();
     const [hourReserving, setHourReserving] = useState<boolean>(false);
 
     const signInWithKakao = async () => {
