@@ -29,7 +29,7 @@ export const PublicStore = create<StoreData>((set) => ({
 
 export default function Home() {
   const [trigger, setTrigger] = useState(0);
-  const { setLoggedIn, setTableData, user, setUser } = PublicStore();
+  const { setLoggedIn, setTableData, setUser } = PublicStore();
   
   useEffect(() => {
     const fetchTable = async () => {

@@ -1,4 +1,4 @@
-import { User } from "@supabase/supabase-js";
+import { User } from "@supabase/auth-js";
 import { supabase } from "../../utils/supabase";
 import { PublicStore } from "@/app/page";
 import { useState } from "react";
