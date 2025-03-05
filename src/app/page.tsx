@@ -50,6 +50,7 @@ export default function Home() {
   // 초기 세션 확인
   const checkSession = async () => {
     const { data: { session } } = await supabase.auth.getSession();
+    console.log(session);
     setLoggedIn(!!session);
     setUser(session?.user || null);
   };
