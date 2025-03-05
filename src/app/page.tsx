@@ -28,31 +28,53 @@ export const PublicStore = create<StoreData>((set) => ({
 }));
 
 export default function Home() {
-  const [trigger, setTrigger] = useState(0);
   const { setLoggedIn, setTableData, setUser } = PublicStore();
   
-  useEffect(() => {
-    const fetchTable = async () => {
-      const { data, error } = await supabase
-      .from('test').select('*');
+  const fetchTable = async () => {
+    const { data, error } = await supabase
+      .from('test')
+      .select('*');
 
-      if (error) {
-        console.error('Error fetching data:', error);
-      } else {
-        console.log('Fetched data:', data);
-        setTableData(data || []);
-      }
-    };
-
-    fetchTable();
-  }, [trigger]);
-
+    if (error) {
+      console.error('Error fetching data:', error);
+    } else {
+      console.log('Fetched data:', data);
+      setTableData(data || []);
+    }
+  };
+  
   // 초기 세션 확인
   const checkSession = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     setLoggedIn(!!session);
     setUser(session?.user || null);
   };
+
+  useEffect(() => {
+    fetchTable();
+
+    // Subscribe to real-time changes
+    const subscription = supabase
+      .channel('table-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'test'
+        },
+        (payload) => {
+          console.log('Change received:', payload);
+          fetchTable(); // Refresh the data when a change occurs
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     checkSession();
@@ -72,7 +94,7 @@ export default function Home() {
       <div className="w-[75%] justify-items-center">
         <Login />
         
-        <TimeTable setTrigger={setTrigger} />
+        <TimeTable />
       </div>
     </div>
   );

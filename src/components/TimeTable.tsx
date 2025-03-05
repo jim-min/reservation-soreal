@@ -1,7 +1,7 @@
 import { PublicStore } from "@/app/page";
 import { supabase } from "../../utils/supabase";
 
-const TimeTable = ({ setTrigger }: { setTrigger : React.Dispatch<React.SetStateAction<number>>}) => {
+const TimeTable = () => {
     const { tableData, loggedIn, user } = PublicStore();
 
     const handleReservation = async (day : string, time : number) => {
@@ -15,7 +15,6 @@ const TimeTable = ({ setTrigger }: { setTrigger : React.Dispatch<React.SetStateA
         }
         else {
             console.log('Data inserted successfully');
-            setTrigger(prev => prev + 1);
         }
         };
 
