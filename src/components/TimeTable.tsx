@@ -1,8 +1,13 @@
 import { PublicStore } from "@/app/page";
 import { supabase } from "../../utils/supabase";
+import { useState } from "react";
+import InfoModal from "@/components/InfoModal";
+import Vacant from "@/components/Vacant";
 
 const TimeTable = () => {
-    const { tableData, loggedIn, user } = PublicStore();
+    const { tableData, loggedIn, user, hoursReserving } = PublicStore();
+    const [ openInfo, setOpenInfo ] = useState<Boolean>(false);
+    const [ selectedReservation, setSelectedReservation ] = useState<string | null>(null);
 
     const handleReservation = async (day : string, time : number) => {
         const { error } = await supabase.from('test').insert({ 
@@ -10,13 +15,28 @@ const TimeTable = () => {
             reserved_time: time, 
             user_name: user?.user_metadata?.name || '익명'
         });
+
+        // 2시간 (hoursReserving) 켜져 있으면 밑에 시간까지 한 번에 예약됨
+        if (hoursReserving && time !== 22) {
+            const { error } = await supabase.from('test').insert({
+                reserved_day: day,
+                reserved_time: time + 1,
+                user_name: user?.user_metadata?.name || '익명'
+            })
+            if (error) {
+                console.error('Error inserting data:', error);
+            }
+            else {
+                console.log('Data inserted successfully');
+            }
+        }
         if (error) {
             console.error('Error inserting data:', error);
         }
         else {
             console.log('Data inserted successfully');
         }
-        };
+    };
 
     const getCurrentWeekDates = () => {
         const today = new Date();
@@ -65,23 +85,25 @@ const TimeTable = () => {
                         <div className="absolute w-12 p-1 text-xs border-r border-gray-200 bg-gray-50 z-10 opacity-30">
                             {hour}:00
                         </div>
+                        {/* // 예약된 시간대이면 표시될 거 */}
                         {tableData.find(data => data.reserved_day === item.date && data.reserved_time === hour) ? (
-                            <div className="flex p-1 h-10 justify-center items-center text-sm bg-fuchsia-100 pl-8">
-                            {tableData.find(data => data.reserved_day === item.date && data.reserved_time === hour)?.user_name}
-                            </div>
-                        ) : (
-                            loggedIn ? (
-                            <button
-                                className="w-full h-10 text-sm hover:bg-blue-50 transition-colors pl-8 whitespace-nowrap"
-                                onClick={() => handleReservation(item.date, hour)}
+                            <div 
+                                className="flex p-1 h-10 justify-center items-center text-sm bg-fuchsia-100 pl-8 cursor-pointer"
+                                onClick={() => {
+                                    setSelectedReservation(tableData.find(data => data.reserved_day === item.date && data.reserved_time === hour)?.user_name || '');
+                                    setOpenInfo(true);
+                                }}
                             >
-                                예약
-                            </button>
-                            ) : (
-                            <div className="flex p-1 h-10 justify-center items-center text-sm text-gray-400 pl-8 whitespace-nowrap">
-                                로그인
+                                {tableData.find(data => data.reserved_day === item.date && data.reserved_time === hour)?.user_name}
+                                {openInfo && selectedReservation && (
+                                    <InfoModal name={selectedReservation} setOpenInfo={setOpenInfo} />
+                                )}
                             </div>
-                            )
+                        ) : ( // 예약 안 된 시간대에 표시될 거
+                            <Vacant 
+                                loggedIn={loggedIn}
+                                onReservation={() => handleReservation(item.date, hour)}
+                            />
                         )}
                         </div>
                     );
@@ -91,7 +113,8 @@ const TimeTable = () => {
             </tr>
             </tbody>
         </table>
-        );
+        
+    );
 } 
         
 export default TimeTable;

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { supabase } from "../../utils/supabase";
 import { User } from "@supabase/auth-js";
 import Login from "../components/Login";
@@ -14,6 +14,8 @@ interface StoreData {
   setTableData: (data: any[]) => void;
   user: User | null;
   setUser: (user: User | null) => void;
+  hoursReserving: boolean;
+  setHoursReserving: (hourReserving: boolean) => void;
 };
 
 export const PublicStore = create<StoreData>((set) => ({
@@ -25,6 +27,8 @@ export const PublicStore = create<StoreData>((set) => ({
   setTableData: (data) => set({ tableData: data }),
   user: null,
   setUser: (user) => set({ user }),
+  hoursReserving: false,
+  setHoursReserving: (hoursReserving) => set({ hoursReserving })
 }));
 
 export default function Home() {

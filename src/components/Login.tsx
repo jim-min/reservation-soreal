@@ -1,11 +1,9 @@
-import { User } from "@supabase/auth-js";
+// import { User } from "@supabase/auth-js";
 import { supabase } from "../../utils/supabase";
 import { PublicStore } from "@/app/page";
-import { useState } from "react";
 
 const Login = () => {
-    const { loggedIn, user } = PublicStore();
-    const [hourReserving, setHourReserving] = useState<boolean>(false);
+    const { loggedIn, user, hoursReserving, setHoursReserving } = PublicStore();
 
     const signInWithKakao = async () => {
         const { data, error } = await supabase.auth.signInWithOAuth({
@@ -43,8 +41,8 @@ const Login = () => {
                     로그아웃
                 </button>
                 <div className="flex">
-                    <div className={`text-xs md:text-lg ${hourReserving === true ? 'bg-green-300' : 'bg-gray-300'} p-2 rounded-l-xl cursor-pointer whitespace-nowrap`} onClick={() => setHourReserving(!hourReserving)}>1시간</div>
-                    <div className={`text-xs md:text-lg ${hourReserving === true ? 'bg-gray-300' : 'bg-green-300'} p-2 rounded-r-xl cursor-pointer whitespace-nowrap`} onClick={() => setHourReserving(!hourReserving)}>2시간</div>
+                    <div className={`text-xs md:text-lg ${hoursReserving === true ? 'bg-gray-300' : 'bg-green-300'} p-2 rounded-l-xl cursor-pointer whitespace-nowrap`} onClick={() => setHoursReserving(false)}>1시간</div>
+                    <div className={`text-xs md:text-lg ${hoursReserving === true ? 'bg-green-300' : 'bg-gray-300'} p-2 rounded-r-xl cursor-pointer whitespace-nowrap`} onClick={() => setHoursReserving(true)}>2시간</div>
                 </div>
                 </div>
             ) : (
