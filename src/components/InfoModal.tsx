@@ -28,7 +28,7 @@ const InfoModal = ({ reserver, setOpenInfo }: InfoModalProps) => {
     return (
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-30 z-50" 
         onClick={(e) => e.target === e.currentTarget && setOpenInfo(false)}>
-            <div className="flex flex-col justify-between bg-white p-4 rounded-lg shadow-lg h-[200px] w-1/4 z-60 cursor-default">
+            <div className="flex flex-col justify-between bg-white p-4 rounded-lg shadow-lg h-[200px] w-1/2 z-60 cursor-default">
                 <h3 className="flex text-lg font-semibold mb-2">예약 정보</h3>
                 <div>
                     <p>예약자: {reserver.name}</p>

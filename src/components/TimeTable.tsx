@@ -93,13 +93,13 @@ const TimeTable = () => {
 
                         return (
                             <div key={hourIndex} className="flex-1 border-b border-gray-200 last:border-b-0">
-                            <div className="absolute w-12 p-1 text-xs border-r border-gray-200 bg-gray-50 z-10 opacity-30">
+                            <div className="absolute w-12 p-1 text-xs border-r border-gray-200 bg-gray-50 z-10 opacity-30 pointer-events-none">
                                 {hour}:00
                             </div>
                             {/* // 예약된 시간대이면 표시될 거 */}
                             {tableData.find(data => data.reserved_day === item.date && data.reserved_time === hour) ? (
                                 <div 
-                                    className="flex p-1 h-10 justify-center items-center text-sm bg-fuchsia-100 pl-8 cursor-pointer"
+                                    className="flex p-1 h-10 pt-2 justify-center items-center text-[0px] xl:text-sm bg-fuchsia-100 cursor-pointer"
                                     onClick={() => {
                                         const reservation = tableData.find(data => data.reserved_day === item.date && data.reserved_time === hour);
                                         setSelectedReservation({
@@ -112,7 +112,6 @@ const TimeTable = () => {
                                     }}
                                 >
                                     {tableData.find(data => data.reserved_day === item.date && data.reserved_time === hour)?.user_name}
-                                    
                                 </div>
                             ) : ( // 예약 안 된 시간대에 표시될 거
                                 <Vacant 
