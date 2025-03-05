@@ -1,6 +1,6 @@
 # 소개
 
-이 프로젝트는 [Next.js](https://nextjs.org)로 제작된 프로젝트입니다. 배포는 [Versel](https://vercel.com), DB는 [Supabase](https://supabase.com/)를 이용하였습니다.
+이 프로젝트는 [Next.js](https://nextjs.org)로 제작된 프로젝트입니다. 배포는 [Vercel](https://vercel.com), DB는 [Supabase](https://supabase.com/)를 이용하였습니다.
 
 - Next.js
     
