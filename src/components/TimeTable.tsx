@@ -31,10 +31,13 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
         }
 
         const { data } = await supabase.from('test').select('*').eq('reserved_day', day);
-        if (data && data.length >= 2) {
+        if (data && data.length >= 1) {
             // 토스트
             setNotification('하루에 2시간 이상 예약할 수 없습니다!');
-            return;
+
+            if (data.length >= 2){
+               return;
+            }
         }
 
         const { error } = await supabase.from('test').insert({ 
@@ -45,7 +48,8 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
         });
 
         // 2시간 (hoursReserving) 켜져 있으면 밑에 시간까지 한 번에 예약됨
-        if (hoursReserving && time !== 22) {
+        if (hoursReserving && time !== 22 && data!.length === 0) {
+            console.log(data)
             const { error } = await supabase.from('test').insert({
                 reserved_day: day,
                 reserved_time: time + 1,
@@ -123,10 +127,22 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
                 </thead>
                 <tbody>
                 <tr>
-                    {weekDates.map((item) => (
+                    {weekDates.map((item, index) => (
                     <td key={item.date} className="border border-gray-300">
                         {Array.from({ length: 12 }).map((_, hourIndex) => {
                         let hour = 11 + hourIndex; // 11:00부터 시작
+                        
+                        if (0 < index && index < 6 && hourIndex < 6) {
+                            return (
+                                <div key={hourIndex} className="flex-1 border-b border-gray-200 last:border-b-0">
+                                    <div className="absolute w-12 p-1 text-xs border-r border-gray-200 bg-gray-50 z-10 opacity-30 pointer-events-none">
+                                        {hour}:00
+                                    </div>
+                                    <div className="flex p-1 h-10 pt-2 justify-center items-center text-sm text-gray-400 whitespace-nowrap">
+                                    </div>
+                                </div>
+                            );
+                        }
 
                         return (
                             <div key={hourIndex} className="flex-1 border-b border-gray-200 last:border-b-0">
