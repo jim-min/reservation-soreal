@@ -7,6 +7,7 @@ import Vacant from "@/components/Vacant";
 const TimeTable = () => {
     const { tableData, loggedIn, user, hoursReserving } = PublicStore();
     const [ openInfo, setOpenInfo ] = useState<Boolean>(false);
+    const [ nextWeek, setNextWeek ] = useState<Boolean>(true);
     const [ selectedReservation, setSelectedReservation ] = useState<{ 
         name : string, 
         user_uid : string,
@@ -45,7 +46,7 @@ const TimeTable = () => {
         }
     };
 
-    const getCurrentWeekDates = () => {
+    const getCurrentWeekDates = (nextWeek : Boolean) => {
         const today = new Date();
         const day = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
         const dates = [];
@@ -55,7 +56,14 @@ const TimeTable = () => {
         sunday.setDate(today.getDate() - day);
         
         // 날짜 포맷팅
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i <= day + Number(nextWeek); i++) {
+            const date = new Date(sunday);
+            date.setDate(sunday.getDate() + i + 7);
+            const formattedDate = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+            const dayName = ['일', '월', '화', '수', '목', '금', '토'][i];
+            dates.push({ date: formattedDate, day: dayName });
+        }
+        for (let i = day + 1 + Number(nextWeek); i < 7; i++) {
             const date = new Date(sunday);
             date.setDate(sunday.getDate() + i);
             const formattedDate = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
@@ -66,7 +74,7 @@ const TimeTable = () => {
         return dates;
     };
 
-    const weekDates = getCurrentWeekDates();
+    const weekDates = getCurrentWeekDates(nextWeek);
 
     return (
         <>
