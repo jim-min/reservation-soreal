@@ -31,13 +31,10 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
     }
 
     const { data } = await supabase.from('test').select('*').eq('reserved_day', day);
-    if (data && data.length >= 1) {
+    if (data && data.length >= 2) {
       // 토스트
       setNotification('하루에 2시간 이상 예약할 수 없습니다!');
-
-      if (data.length >= 2) {
-        return;
-      }
+      return;
     }
 
     const { error } = await supabase.from('test').insert({

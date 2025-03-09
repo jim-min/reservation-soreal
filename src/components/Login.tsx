@@ -31,7 +31,7 @@ const Login = () => {
     return (
         <>
             {loggedIn ? (
-                <div className="flex flex-1 items-center gap-6 mb-14">
+                <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 mb-14 w-full">
                 <span className="text-sm md:text-2xl font-medium whitespace-nowrap text-center">{user?.user_metadata?.name || '사용자'}님<br/>환영합니다</span>
                 <button 
                     className="text-xs md:text-lg bg-yellow-300 font-bold py-2 px-4 rounded-xl whitespace-nowrap" 
