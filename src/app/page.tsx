@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
 import { User } from "@supabase/auth-js";
 import Login from "../components/Login";
@@ -33,6 +33,7 @@ export const PublicStore = create<StoreData>((set) => ({
 
 export default function Home() {
   const { setLoggedIn, setTableData, setUser } = PublicStore();
+  const [ notification, setNotification ] = useState<string | null>(null);
   
   const fetchTable = async () => {
     const { data, error } = await supabase
@@ -98,9 +99,15 @@ export default function Home() {
       <h1 className="text-3xl md:text-5xl underline decoration-wavy decoration-red-700 underline-offset-8 font-extrabold whitespace-nowrap">소리얼 예약 페이지</h1>
       <div className="w-[75%] justify-items-center">
         <Login />
-        
-        <TimeTable />
+        <TimeTable notification={notification} setNotification={setNotification}/>
       </div>
+      {/* Notification Toast */}
+      {notification && (
+          <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-up">
+              {notification}
+              <button className="ml-4 text-white hover:text-gray-200" onClick={() => setNotification(null)}>x</button>
+          </div>
+      )}
     </div>
   );
 }

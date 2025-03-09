@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 import InfoModal from "@/components/InfoModal";
 import Vacant from "@/components/Vacant";
 
-const TimeTable = () => {
+const TimeTable = ({ notification, setNotification }: { notification: string | null; setNotification: (notification: string | null) => void }) => {
     const { tableData, loggedIn, user, hoursReserving } = PublicStore();
     const [ openInfo, setOpenInfo ] = useState<Boolean>(false);
     const [ nextWeek, setNextWeek ] = useState<Boolean>(true);
-    const [ notification, setNotification ] = useState<string | null>(null);
     const [ selectedReservation, setSelectedReservation ] = useState<{ 
         name : string, 
         user_uid : string,
@@ -34,7 +33,7 @@ const TimeTable = () => {
         const { data } = await supabase.from('test').select('*').eq('reserved_day', day);
         if (data && data.length >= 2) {
             // 토스트
-            setNotification('2시간 이상 예약할 수 없습니다!');
+            setNotification('하루에 2시간 이상 예약할 수 없습니다!');
             return;
         }
 
@@ -78,14 +77,14 @@ const TimeTable = () => {
         sunday.setDate(today.getDate() - day);
         
         // 날짜 포맷팅
-        for (let i = 0; i <= day + Number(nextWeek); i++) {
+        for (let i = 0; i < day + Number(nextWeek); i++) {
             const date = new Date(sunday);
             date.setDate(sunday.getDate() + i + 7);
             const formattedDate = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
             const dayName = ['일', '월', '화', '수', '목', '금', '토'][i];
             dates.push({ date: formattedDate, day: dayName });
         }
-        for (let i = day + 1 + Number(nextWeek); i < 7; i++) {
+        for (let i = day + Number(nextWeek); i < 7; i++) {
             const date = new Date(sunday);
             date.setDate(sunday.getDate() + i);
             const formattedDate = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
@@ -100,16 +99,24 @@ const TimeTable = () => {
 
     return (
         <>
+            {/* 취소 모달 */}
             {openInfo && selectedReservation && (
                 <InfoModal reserver={selectedReservation} setOpenInfo={setOpenInfo} />
             )}
+            
             <table className="w-full border-collapse border border-gray-300">
                 <thead>
                 <tr>
-                    {weekDates.map((item) => (
-                    <th key={item.day} className="flex-1 border border-gray-300 p-2 text-xs sm:text-sm md:text-xl">
+                    {weekDates.map((item, index) => (
+                    <th key={item.day} className="flex-1 border border-gray-300 p-2 text-xs sm:text-sm md:text-xl relative">
                         <div>{item.date}</div>
                         <div>{'(' + item.day + ')'}</div>
+                        {index === new Date().getDay() 
+                        && <button 
+                            className={`absolute -top-[45px] left-1/2 transform -translate-x-1/2 bg-yellow-300 px-2 py-2 w-8 h-8 rounded-lg z-30 animate-fade-in-up`}
+                            onClick={() => setNextWeek(!nextWeek)}>
+                            <img src="/alter.png" className="w-4 h-4"></img>
+                        </button>}
                     </th>
                     ))}
                 </tr>
@@ -117,7 +124,7 @@ const TimeTable = () => {
                 <tbody>
                 <tr>
                     {weekDates.map((item) => (
-                    <td key={item.date} className="border border-gray-300 p-0">
+                    <td key={item.date} className="border border-gray-300">
                         {Array.from({ length: 12 }).map((_, hourIndex) => {
                         let hour = 11 + hourIndex; // 11:00부터 시작
 
@@ -157,14 +164,6 @@ const TimeTable = () => {
                 </tr>
                 </tbody>
             </table>
-
-            {/* Notification Toast */}
-            {notification && (
-                <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-up">
-                    {notification}
-                    <button className="ml-4 text-white hover:text-gray-200" onClick={() => setNotification(null)}>x</button>
-                </div>
-            )}
         </>
     );
 } 
