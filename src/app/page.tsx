@@ -2,35 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
-import { User } from "@supabase/auth-js";
 import Login from "../components/Login";
 import TimeTable from "../components/TimeTable";
-import { create } from "zustand";
-import { Database } from "../../types_db";
-
-interface StoreData {
-  loggedIn: boolean;
-  setLoggedIn: (loginState: boolean) => void;
-  tableData: Database['public']['Tables']['test']['Row'][];
-  setTableData: (data: Database['public']['Tables']['test']['Row'][]) => void;
-  user: User | null;
-  setUser: (user: User | null) => void;
-  hoursReserving: boolean;
-  setHoursReserving: (hourReserving: boolean) => void;
-};
-
-export const PublicStore = create<StoreData>((set) => ({
-  loggedIn: false,
-  setLoggedIn(loginState) {
-    set({ loggedIn: loginState });
-  },
-  tableData: [],
-  setTableData: (data) => set({ tableData: data }),
-  user: null,
-  setUser: (user) => set({ user }),
-  hoursReserving: false,
-  setHoursReserving: (hoursReserving) => set({ hoursReserving })
-}));
+import { PublicStore } from "../store/store";
 
 export default function Home() {
   const { setLoggedIn, setTableData, setUser } = PublicStore();

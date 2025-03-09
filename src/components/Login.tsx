@@ -1,6 +1,6 @@
 // import { User } from "@supabase/auth-js";
 import { supabase } from "../../utils/supabase";
-import { PublicStore } from "@/app/page";
+import { PublicStore } from "../store/store";
 
 const Login = () => {
     const { loggedIn, user, hoursReserving, setHoursReserving } = PublicStore();
