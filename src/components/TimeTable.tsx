@@ -1,6 +1,6 @@
 import { PublicStore } from "@/app/page";
 import { supabase } from "../../utils/supabase";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InfoModal from "@/components/InfoModal";
 import Vacant from "@/components/Vacant";
 
@@ -8,6 +8,7 @@ const TimeTable = () => {
     const { tableData, loggedIn, user, hoursReserving } = PublicStore();
     const [ openInfo, setOpenInfo ] = useState<Boolean>(false);
     const [ nextWeek, setNextWeek ] = useState<Boolean>(true);
+    const [ notification, setNotification ] = useState<string | null>(null);
     const [ selectedReservation, setSelectedReservation ] = useState<{ 
         name : string, 
         user_uid : string,
@@ -15,7 +16,28 @@ const TimeTable = () => {
         time : number
      } | null>(null);
 
+    // Clear notification after 3 seconds
+    useEffect(() => {
+        if (notification) {
+            const timer = setTimeout(() => {
+                setNotification(null);
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [notification]);
+
     const handleReservation = async (day : string, time : number) => {
+        if (!user) {
+            return;
+        }
+
+        const { data } = await supabase.from('test').select('*').eq('reserved_day', day);
+        if (data && data.length >= 2) {
+            // 토스트
+            setNotification('2시간 이상 예약할 수 없습니다!');
+            return;
+        }
+
         const { error } = await supabase.from('test').insert({ 
             reserved_day: day, 
             reserved_time: time, 
@@ -135,9 +157,15 @@ const TimeTable = () => {
                 </tr>
                 </tbody>
             </table>
+
+            {/* Notification Toast */}
+            {notification && (
+                <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-up">
+                    {notification}
+                    <button className="ml-4 text-white hover:text-gray-200" onClick={() => setNotification(null)}>x</button>
+                </div>
+            )}
         </>
-        
-        
     );
 } 
         
