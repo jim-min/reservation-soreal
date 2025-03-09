@@ -1,5 +1,5 @@
 interface VacantProps {
-    loggedIn: Boolean;
+    loggedIn: boolean;
     onReservation: () => void;
 }
 

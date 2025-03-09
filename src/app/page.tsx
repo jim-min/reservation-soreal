@@ -6,12 +6,13 @@ import { User } from "@supabase/auth-js";
 import Login from "../components/Login";
 import TimeTable from "../components/TimeTable";
 import { create } from "zustand";
+import { Database } from "../../types_db";
 
 interface StoreData {
-  loggedIn: Boolean;
-  setLoggedIn: (loginState: Boolean) => void;
-  tableData: any[];
-  setTableData: (data: any[]) => void;
+  loggedIn: boolean;
+  setLoggedIn: (loginState: boolean) => void;
+  tableData: Database['public']['Tables']['test']['Row'][];
+  setTableData: (data: Database['public']['Tables']['test']['Row'][]) => void;
   user: User | null;
   setUser: (user: User | null) => void;
   hoursReserving: boolean;

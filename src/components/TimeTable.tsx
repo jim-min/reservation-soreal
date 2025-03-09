@@ -6,8 +6,8 @@ import Vacant from "@/components/Vacant";
 
 const TimeTable = ({ notification, setNotification }: { notification: string | null; setNotification: (notification: string | null) => void }) => {
     const { tableData, loggedIn, user, hoursReserving } = PublicStore();
-    const [ openInfo, setOpenInfo ] = useState<Boolean>(false);
-    const [ nextWeek, setNextWeek ] = useState<Boolean>(true);
+    const [ openInfo, setOpenInfo ] = useState<boolean>(false);
+    const [ nextWeek, setNextWeek ] = useState<boolean>(true);
     const [ selectedReservation, setSelectedReservation ] = useState<{ 
         name : string, 
         user_uid : string,
@@ -71,7 +71,7 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
         }
     };
 
-    const getCurrentWeekDates = (nextWeek : Boolean) => {
+    const getCurrentWeekDates = (nextWeek : boolean) => {
         const today = new Date();
         const day = today.getDay(); // 0 is Sunday, 1 is Monday, etc.
         const dates = [];
@@ -130,7 +130,7 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
                     {weekDates.map((item, index) => (
                     <td key={item.date} className="border border-gray-300">
                         {Array.from({ length: 12 }).map((_, hourIndex) => {
-                        let hour = 11 + hourIndex; // 11:00부터 시작
+                        const hour = 11 + hourIndex; // 11:00부터 시작
                         
                         if (0 < index && index < 6 && hourIndex < 6) {
                             return (

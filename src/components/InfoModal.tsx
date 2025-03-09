@@ -8,7 +8,7 @@ interface InfoModalProps {
         day: string,
         time: number
     };
-    setOpenInfo: (open: Boolean) => void;
+    setOpenInfo: (open: boolean) => void;
 }
 
 const InfoModal = ({ reserver, setOpenInfo }: InfoModalProps) => {
