@@ -82,7 +82,7 @@ export default function Home() {
               <button className="ml-4 text-white hover:text-gray-200" onClick={() => setNotification(null)}>x</button>
           </div>
       )}
-      <h1 className="text-3xl md:text-5xl underline decoration-wavy decoration-red-700 underline-offset-8 font-extrabold whitespace-nowrap mt-8">소리얼 예약 페이지</h1>
+      <h1 className="text-3xl md:text-5xl underline decoration-wavy decoration-red-700 underline-offset-8 font-extrabold whitespace-nowrap">소리얼 예약 페이지</h1>
     </div>
   );
 }

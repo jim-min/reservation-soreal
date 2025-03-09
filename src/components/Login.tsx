@@ -31,7 +31,7 @@ const Login = () => {
     return (
         <>
             {loggedIn ? (
-                <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 mb-14 w-full">
+                <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 mb-14 mt-4 w-full">
                 <span className="text-sm md:text-2xl font-medium whitespace-nowrap text-center">{user?.user_metadata?.name || '사용자'}님<br/>환영합니다</span>
                 <button 
                     className="text-xs md:text-lg bg-yellow-300 font-bold py-2 px-4 rounded-xl whitespace-nowrap" 
@@ -47,7 +47,7 @@ const Login = () => {
                 </div>
             ) : (
                 <button 
-                className="bg-yellow-300 font-bold py-2 px-4 mb-14 rounded" 
+                className="bg-yellow-300 font-bold py-2 px-4 mb-14 mt-4 rounded" 
                 type="button" 
                 style={{ fontFamily: 'Noto Sans KR' }}
                 onClick={() => signInWithKakao()}>
