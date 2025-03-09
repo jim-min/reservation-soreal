@@ -11,6 +11,20 @@
   font-style: normal;
 }
 
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'ChungjuKimSaengTTF', 'Noto Sans KR';
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -21,10 +35,4 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: 'ChungjuKimSaengTTF', 'Noto Sans KR';
 }

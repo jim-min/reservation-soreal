@@ -70,9 +70,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-items-center min-h-screen w-full p-8 pb-20 gap-8 font-[family-name:var(--font-geist-sans)] overflow-x-hidden">
-      <h1 className="text-3xl md:text-5xl underline decoration-wavy decoration-red-700 underline-offset-8 font-extrabold whitespace-nowrap">소리얼 예약 페이지</h1>
-      <div className="w-[75%] justify-items-center">
+    <div className="flex flex-col items-center justify-items-center min-h-screen w-full px-0 sm:px-4 pb-20 gap-8 font-[family-name:var(--font-geist-sans)] overflow-x-hidden">
+      <h1 className="text-3xl md:text-5xl underline decoration-wavy decoration-red-700 underline-offset-8 font-extrabold whitespace-nowrap mt-8">소리얼 예약 페이지</h1>
+      <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[80%] justify-items-center">
         <Login />
         <TimeTable notification={notification} setNotification={setNotification}/>
       </div>

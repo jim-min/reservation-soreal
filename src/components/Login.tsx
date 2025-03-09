@@ -47,7 +47,7 @@ const Login = () => {
                 </div>
             ) : (
                 <button 
-                className="bg-yellow-300 font-bold py-2 px-4 mb-8 rounded" 
+                className="bg-yellow-300 font-bold py-2 px-4 mb-14 rounded" 
                 type="button" 
                 style={{ fontFamily: 'Noto Sans KR' }}
                 onClick={() => signInWithKakao()}>
