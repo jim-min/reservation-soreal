@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next export",
-    "generate-types": "npx supabase gen types typescript --project-id jfdprntbnbbfnozepcrs --schema public > types_db.ts"
+    "export": "next export"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.47.9",
