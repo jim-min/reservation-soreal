@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
 import Login from "../components/Login";
 import TimeTable from "../components/TimeTable";
-import { PublicStore, ReservationWithUser } from "../store/store";
+import { PublicStore } from "../store/store";
 
 export default function Home() {
   const { setLoggedIn, setTableData, setUser } = PublicStore();

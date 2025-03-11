@@ -29,7 +29,8 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
     if (!user) {
       return;
     }
-
+    
+    // TODO : 한 사람이 2시간 이상 안 되는 건데 그냥 하루에 2시간 예약 안 되게 해버림 수정 필요
     const { data } = await supabase.from('reservation').select('*').eq('reserved_day', day);
     if (data && data.length >= 2) {
       // 토스트
