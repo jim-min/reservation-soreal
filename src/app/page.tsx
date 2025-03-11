@@ -4,22 +4,27 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
 import Login from "../components/Login";
 import TimeTable from "../components/TimeTable";
-import { PublicStore } from "../store/store";
+import { PublicStore, ReservationWithUser } from "../store/store";
 
 export default function Home() {
   const { setLoggedIn, setTableData, setUser } = PublicStore();
   const [ notification, setNotification ] = useState<string | null>(null);
   
   const fetchTable = async () => {
-    const { data, error } = await supabase
-      .from('test')
-      .select('*');
+    // Get all reservations
+    const { data: reservationData, error: reservationError } = await supabase
+      .from('reservation')
+      .select(`
+        reserved_day, 
+        reserved_time, 
+        users!user_uid(uid, user_name)
+      `);
 
-    if (error) {
-      console.error('Error fetching data:', error);
+    if (reservationError) {
+      console.error('Error fetching data:', reservationError);
     } else {
-      console.log('Fetched data:', data);
-      setTableData(data || []);
+      console.log('Fetched data:', reservationData);
+      setTableData(reservationData || []);
     }
   };
   
@@ -42,7 +47,7 @@ export default function Home() {
         {
           event: '*',
           schema: 'public',
-          table: 'test'
+          table: 'reservation'
         },
         (payload) => {
           console.log('Change received:', payload);

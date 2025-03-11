@@ -30,26 +30,24 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
       return;
     }
 
-    const { data } = await supabase.from('test').select('*').eq('reserved_day', day);
+    const { data } = await supabase.from('reservation').select('*').eq('reserved_day', day);
     if (data && data.length >= 2) {
       // 토스트
       setNotification('하루에 2시간 이상 예약할 수 없습니다!');
       return;
     }
 
-    const { error } = await supabase.from('test').insert({
+    const { error } = await supabase.from('reservation').insert({
       reserved_day: day,
       reserved_time: time,
-      user_name: user?.user_metadata?.name || '익명',
       user_uid: user?.id,
     });
 
     // 2시간 (hoursReserving) 켜져 있으면 밑에 시간까지 한 번에 예약됨
     if (hoursReserving && time !== 22 && data && data.length === 0) {
-      const { error } = await supabase.from('test').insert({
+      const { error } = await supabase.from('reservation').insert({
         reserved_day: day,
         reserved_time: time + 1,
-        user_name: user?.user_metadata?.name || '익명',
         user_uid: user?.id,
       });
       if (error) {
@@ -151,15 +149,15 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
                           onClick={() => {
                             const reservation = tableData.find((data) => data.reserved_day === item.date && data.reserved_time === hour);
                             setSelectedReservation({
-                              name: reservation?.user_name || '',
-                              user_uid: reservation?.user_uid || '',
+                              name: reservation?.users?.user_name || '',
+                              user_uid: reservation?.users?.uid || '',
                               day: item.date,
                               time: hour,
                             });
                             setOpenInfo(true);
                           }}
                         >
-                          {tableData.find((data) => data.reserved_day === item.date && data.reserved_time === hour)?.user_name}
+                          {tableData.find((data) => data.reserved_day === item.date && data.reserved_time === hour)?.users?.user_name || '익명'}
                         </div>
                       ) : ( // 예약 안 된 시간대에 표시될 거
                         <Vacant

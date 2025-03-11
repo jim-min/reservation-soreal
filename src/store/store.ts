@@ -1,12 +1,21 @@
 import { create } from "zustand";
-import { Database } from "../../types_db";
 import { User } from "@supabase/auth-js";
+
+// Define the structure for joined data
+export interface ReservationWithUser {
+  reserved_day: string | null;
+  reserved_time: number | null;
+  users: {
+    uid: string;
+    user_name: string;
+  } | null;
+}
 
 interface StoreData {
   loggedIn: boolean;
   setLoggedIn: (loginState: boolean) => void;
-  tableData: Database['public']['Tables']['test']['Row'][];
-  setTableData: (data: Database['public']['Tables']['test']['Row'][]) => void;
+  tableData: ReservationWithUser[];
+  setTableData: (data: ReservationWithUser[]) => void;
   user: User | null;
   setUser: (user: User | null) => void;
   hoursReserving: boolean;

@@ -12,7 +12,7 @@ interface InfoModalProps {
 
 const InfoModal = ({ reserver, setOpenInfo }: InfoModalProps) => {
     const handleCancel = async (): Promise<void> => {
-        const { error } = await supabase.from('test').delete().match({
+        const { error } = await supabase.from('reservation').delete().match({
             reserved_day: reserver.day,
             reserved_time: reserver.time,
             user_uid: reserver.user_uid //어차피 RLS가 막긴 하는데 그래도 2번 체크
