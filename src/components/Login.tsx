@@ -1,4 +1,3 @@
-// import { User } from "@supabase/auth-js";
 import { supabase } from "../../utils/supabase";
 import { PublicStore } from "../store/store";
 
@@ -8,6 +7,9 @@ const Login = () => {
     const signInWithKakao = async () => {
         const { data, error } = await supabase.auth.signInWithOAuth({
           provider: 'kakao',
+          options: {
+            redirectTo: window.location.origin,
+          }
         });
         
         if (error) {
@@ -16,6 +18,41 @@ const Login = () => {
           console.log("Sign in successful:", data);
         }
       };
+    
+      // users에 없으면 users table에 유저 추가하는 로직
+      supabase.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          const { user } = session;
+          
+          // users에 있느냐
+          const { data: existingUser, error: fetchError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('uid', user.id)
+            .single();
+          
+          if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 means no rows returned
+            console.error('Error checking if user exists:', fetchError);
+            return;
+          }
+          
+          // 없을 때
+          if (!existingUser) {
+            const { error: insertError } = await supabase
+              .from('users')
+              .insert({
+                uid: user.id,
+                user_name: user.user_metadata.name || '사용자',
+              });
+            
+            if (insertError) {
+              console.error('Error creating user record:', insertError);
+            } else {
+              console.log('User record created successfully');
+            }
+          }
+        }
+      });
     
       async function signOut() {
         const { error } = await supabase.auth.signOut()
