@@ -20,6 +20,8 @@ interface StoreData {
   setUser: (user: User | null) => void;
   hoursReserving: boolean;
   setHoursReserving: (hourReserving: boolean) => void;
+  vacationMode: boolean;
+  setVacationMode: (vacationMode: boolean) => void;
 };
 
 export const PublicStore = create<StoreData>((set) => ({
@@ -32,5 +34,7 @@ export const PublicStore = create<StoreData>((set) => ({
   user: null,
   setUser: (user) => set({ user }),
   hoursReserving: false,
-  setHoursReserving: (hoursReserving) => set({ hoursReserving })
+  setHoursReserving: (hoursReserving) => set({ hoursReserving }),
+  vacationMode: false,
+  setVacationMode: (vacationMode) => set({ vacationMode })
 }));

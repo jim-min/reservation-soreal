@@ -5,10 +5,10 @@ import InfoModal from "@/components/InfoModal";
 import Vacant from "@/components/Vacant";
 
 const TimeTable = ({ notification, setNotification }: { notification: string | null; setNotification: (notification: string | null) => void }) => {
-  const { tableData, loggedIn, user, hoursReserving } = PublicStore();
-  const [openInfo, setOpenInfo] = useState<boolean>(false);
-  const [nextWeek, setNextWeek] = useState<boolean>(true);
-  const [selectedReservation, setSelectedReservation] = useState<{
+  const { vacationMode, tableData, loggedIn, user, hoursReserving } = PublicStore();
+  const [ openInfo, setOpenInfo ] = useState<boolean>(false);
+  const [ nextWeek, setNextWeek ] = useState<boolean>(true);
+  const [ selectedReservation, setSelectedReservation ] = useState<{
     name: string;
     user_uid: string;
     day: string;
@@ -126,7 +126,8 @@ const TimeTable = ({ notification, setNotification }: { notification: string | n
                 {Array.from({ length: 12 }).map((_, hourIndex) => {
                   const hour = 11 + hourIndex; // 11:00부터 시작
 
-                  if (0 < index && index < 6 && hourIndex < 6) {
+                  // 평일 11시 ~ 16시 동안은 사용 불가 (방학 모드 때는 가능)
+                  if (!vacationMode && 0 < index && index < 6 && hourIndex < 6) {
                     return (
                       <div key={hourIndex} className="flex-1 border-b border-gray-200 last:border-b-0">
                         <div className="absolute w-12 p-1 text-xs border-r border-gray-200 bg-gray-50 z-10 opacity-30 pointer-events-none">
